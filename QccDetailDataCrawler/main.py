@@ -13,6 +13,7 @@ import random
 import re
 import fake_useragent
 import pymongo
+from pyquery import PyQuery  as pq
 from pyppeteer import launch
 from settings.log_conf import logger
 
@@ -87,35 +88,28 @@ async def main(website_name, website_url):
 
     await asyncio.sleep(1)
 
-    try:
-        await asyncio.sleep(3)
-        content = await page.content()
-        ztb = re.findall(r"(招投标 \d+)", content)[0]
-        gys = re.findall(r"(供应商 \d+)", content)[0]
-    except IndexError as e:
-        await asyncio.sleep(1)
-        await asyncio.sleep(3)
-        await page.click(
-            "section.bottom-nav > table > tr:nth-child(4) > td:nth-child(2) > a:nth-child(1)")
-        content = await page.content()
-        ztb = re.findall(r"(招投标 \d+)", content)[0]
-        gys = re.findall(r"(供应商 \d+)", content)[0]
+    page_soucre=await page.content()
 
-    except Exception:
-        ztb = 0
-        gys = 0
+    doc = pq(page_soucre)
 
-    mydict = {
-        "网站名": website_name,
-        "网站连接": website_url,
-        "招投标": ztb,
-        "供应商": gys,
+    print(doc('.item:contains(招投标)').text())
+    print(doc('.item:contains(供应商)').text())
+    print(doc('.item:contains(竞争对手)').text())
+    print(doc('.item:contains(新闻舆情)').text())
+    print(doc('.item:contains(微信公众号)').text())
+    print(doc('.item:contains(相关公告)').text())
 
-    }
-    # x = mycol.insert_one(mydict)
-    mycol.update_one(mydict, {'$set': mydict}, upsert=True)
-
-    logger.info("公司名：", website_name, "||||||", ztb, gys)
+    # mydict = {
+    #     "网站名": website_name,
+    #     "网站连接": website_url,
+    #     "招投标": ztb,
+    #     "供应商": gys,
+    #
+    # }
+    # # x = mycol.insert_one(mydict)
+    # mycol.update_one(mydict, {'$set': mydict}, upsert=True)
+    #
+    # logger.info("公司名：", website_name, "||||||", ztb, gys)
     await page.close()
     await browser.close()
 

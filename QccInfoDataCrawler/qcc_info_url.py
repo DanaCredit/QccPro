@@ -19,7 +19,7 @@ myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient['QccUrl']
 mycol = mydb['titleUrlNews1']
 
-wb = load_workbook('static/spider_目标网站.xlsx')
+wb = load_workbook('source/spider_目标网站.xlsx')
 
 # 得到sheet页的对象
 sheet = wb['Sheet1']
