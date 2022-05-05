@@ -28,6 +28,8 @@ client.drop_database("QccUrlNumber")
 db = client.QccUrlNumber
 # 创建 status 集合
 coll = db.status
+# 加入一条数据
+rs = coll.insert_one({"success_url": "www.baidu.com"})
 
 
 def screen_size():
@@ -109,16 +111,24 @@ async def main(website_name, website_url):
 
     doc = pq(page_soucre)
 
+    ztb = doc('.item:contains(招投标)').text()
+    gys = doc('.item:contains(供应商)').text()
+    jzds = doc('.item:contains(竞争对手)').text()
+    xwyq = doc('.item:contains(新闻舆情)').text()
+    wxgzh = doc('.item:contains(微信公众号)').text()
+    xggg = doc('.item:contains(相关公告)').text()
+
+
     info_website = pd.DataFrame(
         {
             '公司名': [website_name],
             '公司qcc链接地址': [website_url],
-            '招投标': [doc('.item:contains(招投标)').text()],
-            '供应商': [doc('.item:contains(供应商)').text()],
-            '竞争对手': [doc('.item:contains(竞争对手)').text()],
-            '新闻舆情': [doc('.item:contains(新闻舆情)').text()],
-            '微信公众号': [doc('.item:contains(微信公众号)').text()],
-            '相关公告': [doc('.item:contains(相关公告)').text()],
+            '招投标': [ztb],
+            '供应商': [gys],
+            '竞争对手': [jzds],
+            '新闻舆情': [xwyq],
+            '微信公众号': [wxgzh],
+            '相关公告': [xggg],
         }
     )
     writer = pd.ExcelWriter('source/website.xlsx')
@@ -128,17 +138,18 @@ async def main(website_name, website_url):
     print(info_website)
 
     mydict = {
-            '公司名': [website_name],
-            '公司qcc链接地址': [website_url],
-            '招投标': [doc('.item:contains(招投标)').text()],
-            '供应商': [doc('.item:contains(供应商)').text()],
-            '竞争对手': [doc('.item:contains(竞争对手)').text()],
-            '新闻舆情': [doc('.item:contains(新闻舆情)').text()],
-            '微信公众号': [doc('.item:contains(微信公众号)').text()],
-            '相关公告': [doc('.item:contains(相关公告)').text()],
+            '公司名': website_name,
+            '公司qcc链接地址': website_url,
+            '招投标': ztb,
+            '供应商': gys,
+            '竞争对手': jzds,
+            '新闻舆情': xwyq,
+            '微信公众号': wxgzh,
+            '相关公告': xggg,
         }
     coll.update_one(mydict, {'$set': mydict}, upsert=True)
 
+    print(mydict)
     await page.close()
     await browser.close()
 
