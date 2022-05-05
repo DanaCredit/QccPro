@@ -4,3 +4,7 @@ QccDetailDataCrawler/log
 QccInfoDataCrawler/log
 
 virtualenv
+
+.idea
+
+QccDetailDataCrawler/__pycache__
