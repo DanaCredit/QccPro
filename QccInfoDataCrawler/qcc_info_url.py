@@ -19,7 +19,7 @@ myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient['QccUrl']
 mycol = mydb['titleUrlNews1']
 
-wb = load_workbook('source/spider_目标网站.xlsx')
+wb = load_workbook('source/qcc_info_url.xlsx')
 
 # 得到sheet页的对象
 sheet = wb['Sheet1']
@@ -65,13 +65,13 @@ def request():
     for name in name_list:
         url = 'https://www.qcc.com/web/search?key=' + str(name)
 
-        # cookie 伪装
+        # cookie.txt 伪装
         headers = {
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
             'accept-encoding': 'gzip, deflate, br',
             'accept-language': 'zh-CN,zh;q=0.9',
             'cache-control': 'no-cache',
-            'cookie': 'qcc_did=33213b33-97cf-47f6-bfb3-4ada13d561f0; UM_distinctid=17f43dbebb09a5-00ca89c96828dc-a3e3164-1fa400-17f43dbebb110dc; QCCSESSID=3bac48cc49954a47bcedb6f3e3; acw_tc=3ad8379e16469653004761431eddd7792cc1d7911d382e1c6f9eb8001a; CNZZDATA1254842228=787216255-1646101019-%7C1646965021',
+            'cookie.txt': 'qcc_did=33213b33-97cf-47f6-bfb3-4ada13d561f0; UM_distinctid=17f43dbebb09a5-00ca89c96828dc-a3e3164-1fa400-17f43dbebb110dc; QCCSESSID=3bac48cc49954a47bcedb6f3e3; acw_tc=3ad8379e16469653004761431eddd7792cc1d7911d382e1c6f9eb8001a; CNZZDATA1254842228=787216255-1646101019-%7C1646965021',
             'pragma': 'no-cache',
             'referer': 'https://www.qcc.com/web/search?key=%E5%B5%8A%E5%B7%9E%E5%B8%82%E7%94%98%E9%9C%96%E9%95%87%E8%8F%9C%E5%AD%90%E6%B9%BE%E5%9B%9B%E8%A7%92%E5%B9%B4%E5%B2%AD%E4%B8%8B%E7%9F%BF',
             'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="99", "Google Chrome";v="99"',
